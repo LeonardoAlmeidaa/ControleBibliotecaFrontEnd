@@ -1,20 +1,26 @@
 <template>
-  <nav class="navbar navbar-expand-lg text-bg-dark d-flex justify-content-between" v-if="logged">
+  <nav
+    class="navbar navbar-expand-lg text-bg-dark d-flex justify-content-between"
+    v-if="logged"
+  >
     <div>
       <i class="bi bi-list icon_action ps-3" @click="toggleSidebar"></i>
-      <img src="@/assets/brand_horizontal.png" class="ps-3" style="width: 200px;"/>
+      <img src="@/assets/logo.png" class="ps-3" style="width: 200px" />
     </div>
     <div>
-      <i class="bi bi-person-fill-gear icon" @click="$router.push({ name: 'myProfile' })"></i>
+      <i
+        class="bi bi-person-fill-gear icon"
+        @click="$router.push({ name: 'myProfile' })"
+      ></i>
       <span class="px-2 me-1">{{ user.name }}</span>
       <TheButton
-          type="button"
-          label="Sair"
-          size="btn-sm me-3"
-          color="danger"
-          icon="bi bi-box-arrow-in-right me-2"
-          @click="logout"
-        />
+        type="button"
+        label="Sair"
+        size="btn-sm me-3"
+        color="danger"
+        icon="bi bi-box-arrow-in-right me-2"
+        @click="logout"
+      />
     </div>
   </nav>
   <div class="wrapper">
@@ -37,240 +43,89 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { baseApiUrl } from '@/global'
-import { mapState } from 'vuex'
-import axios from 'axios'
-import TheButton from '@/components/formComponents/TheButton.vue'
-import TheSideMenu from '@/components/general/TheSideMenu.vue'
+import { ref } from "vue";
+import { baseApiUrl } from "@/global";
+import { mapState } from "vuex";
+import axios from "axios";
+import TheButton from "@/components/formComponents/TheButton.vue";
+import TheSideMenu from "@/components/general/TheSideMenu.vue";
 
 export default {
   setup() {
     const sidebar = ref(null);
 
     const toggleSidebar = () => {
-      sidebar.value.classList.toggle('active');
-    }
+      sidebar.value.classList.toggle("active");
+    };
 
-    return { sidebar, toggleSidebar }
+    return { sidebar, toggleSidebar };
   },
 
-  components: { TheSideMenu, TheButton, },
+  components: { TheSideMenu, TheButton },
 
   computed: {
-    ...mapState(['logged', 'user']),
+    ...mapState(["logged", "user"]),
   },
 
   data: () => ({
     menuList: [
       {
-        code: 'dashboard',
-        title: 'Dashboard',
+        code: "dashboard",
+        title: "Dashboard",
         status: false,
-        icon: 'bi bi-pie-chart-fill',
+        icon: "bi bi-pie-chart-fill",
         children: [],
       },
       {
         code: null,
-        title: 'Relatórios',
+        title: "Relatórios",
         status: false,
-        icon: 'bi bi-file-earmark-text-fill',
+        icon: "bi bi-file-earmark-text-fill",
         children: [
           {
-            code: 'sgm',
-            title: 'SGM',
+            code: "sgm",
+            title: "SGM",
             status: false,
-            icon: 'bi bi-circle',
+            icon: "bi bi-circle",
             children: [],
           },
         ],
       },
       {
         code: null,
-        title: 'Cadastros',
+        title: "Cadastros",
         status: false,
-        icon: 'bi bi-pencil-square',
+        icon: "bi bi-pencil-square",
         children: [
           {
-            code: 'job',
-            title: 'Aterro/Reaterro',
+            code: "livros",
+            title: "Livro",
             status: false,
-            icon: 'bi bi-circle',
+            icon: "bi bi-circle",
             children: [],
           },
-          {
-            code: 'os',
-            title: 'Os',
-            status: false,
-            icon: 'bi bi-circle',
-            child: 'osApropriacoes',
-            children: [],
-          },
-          {
-            code: 'service',
-            title: 'Serviços',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          {
-            code: 'mos',
-            title: 'Mos',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          {
-            code: 'team',
-            title: 'Equipes',
-            status: false,
-            icon: 'bi bi-circle',
-            child: 'employeeTeam',
-            children: [],
-          },
-          {
-            code: 'vehicles',
-            title: 'Veículos',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          {
-            code: 'employee',
-            title: 'Funcionários',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          {
-            code: 'item',
-            title: 'Itens',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          // {
-          //   code: 'district',
-          //   title: 'Distritos',
-          //   status: false,
-          //   icon: 'bi bi-geo-alt-fill',
-          //   children: [],
-          // },
-          // {
-          //   code: 'locale',
-          //   title: 'Endereços',
-          //   status: false,
-          //   icon: 'bi bi-geo-alt-fill',
-          //   children: [],
-          // },
-          // {
-          //   code: 'resource',
-          //   title: 'Recursos',
-          //   status: false,
-          //   icon: 'bi bi-tools',
-          //   children: [],
-          // },
-          // {
-          //   code: 'constructUnity',
-          //   title: 'Unidade Construtiva',
-          //   status: false,
-          //   icon: 'bi bi-building-fill',
-          //   children: [],
-          // },
         ],
       },
       {
         code: null,
-        title: 'Parametrização',
+        title: "Administração",
         status: false,
-        icon: 'bi bi-sliders',
-        children: [
-          // {
-          //   code: 'osApropriacoes',
-          //   title: 'Apropriação',
-          //   status: false,
-          //   icon: 'bi bi-tools',
-          //   children: [],
-          // },
-          {
-            code: 'paramBonificacao',
-            title: 'Bonificação',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          {
-            code: 'paramDesconto',
-            title: 'Descontos',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          {
-            code: 'parametros',
-            title: 'Parâmetros',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          {
-            code: 'canteiroTotal',
-            title: 'Canteiro Total',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          {
-            code: 'obra',
-            title: 'Medição Obra',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          {
-            code: 'osMedicao',
-            title: 'Medição OS',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-        ]
-      },
-      {
-        code: null,
-        title: 'Administração',
-        status: false,
-        icon: 'bi bi-gear-fill',
+        icon: "bi bi-gear-fill",
         children: [
           {
-            code: 'group',
-            title: 'Grupos',
-            status: false,
-            icon: 'bi bi-circle',
-            child: 'acl',
-            children: [],
-          },
-          {
-            code: 'screen',
-            title: 'Programas',
-            status: false,
-            icon: 'bi bi-circle',
-            children: [],
-          },
-          {
-            code: 'user',
-            title: 'Usuários',
-            icon: 'bi bi-circle',
-            child: 'userGroup',
+            code: "user",
+            title: "Usuários",
+            icon: "bi bi-circle",
+            child: "userGroup",
             status: false,
           },
         ],
       },
       {
-        code: 'myProfile',
-        title: 'Meu Perfil',
+        code: "myProfile",
+        title: "Meu Perfil",
         status: false,
-        icon: 'bi-person-fill',
+        icon: "bi-person-fill",
         children: [],
       },
     ],
@@ -278,24 +133,24 @@ export default {
 
   methods: {
     logout() {
-      const url = `${baseApiUrl}/logout`
-      axios.defaults.withCredentials = true
+      const url = `${baseApiUrl}/logout`;
+      axios.defaults.withCredentials = true;
 
       const result = axios
         .post(url)
         .then((res) => {
-          this.$store.dispatch('setLogged', false)
-          this.$router.push({ name: 'login' })
+          this.$store.dispatch("setLogged", false);
+          this.$router.push({ name: "login" });
         })
         .catch((err) => {
-          console.log(err)
-          return err
-        })
+          console.log(err);
+          return err;
+        });
 
-      return result
+      return result;
     },
-  }
-}
+  },
+};
 </script>
 
 <style>
@@ -355,7 +210,7 @@ export default {
   transform-origin: 0.5em 50%;
 }
 
-.btn-toggle[aria-expanded='true']::after {
+.btn-toggle[aria-expanded="true"]::after {
   transform: rotate(450deg);
 }
 

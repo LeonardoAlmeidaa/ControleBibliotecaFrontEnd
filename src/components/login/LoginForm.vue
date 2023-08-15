@@ -63,7 +63,7 @@ export default {
             const rawUser = await get('me')
             this.$store.dispatch('setLogged', true)
             this.$store.dispatch('setUser', rawUser)
-            this.$router.push({ name: 'dashboard' })
+            this.$router.push({ name: 'home' })
             return true
           })
           .catch((err) => {

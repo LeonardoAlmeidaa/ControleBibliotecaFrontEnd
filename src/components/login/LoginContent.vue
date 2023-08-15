@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-8 d-flex flex-column justify-content-center align-items-center bg-light divContent">
-    <img src="@/assets/brand.png">
+    <img src="@/assets/logo.png">
   </div>
 </template>
 

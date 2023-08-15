@@ -1,5 +1,5 @@
 <template>
-  <section class="mx-2">
+  <section class="mx-2" >
     <h4>{{ title }}</h4>
     <TheBreadcrumb v-if="breadcrumb"/>
   </section>
