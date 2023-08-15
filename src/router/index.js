@@ -13,6 +13,21 @@ const routes = [
     name: 'home',
     component: Home
   },
+  {
+    path: '/livros',
+    name: 'livros',
+    component: () => import('@/views/Livros.vue')
+  },
+  {
+    path: '/livro/cadastro/novo',
+    name: 'livrosNew',
+    component: () => import('@/views/LivrosNew.vue')
+  },
+  {
+    path: '/livro/:id/editar',
+    name: 'livroUpdate',
+    component: () => import('@/views/LivrosNew.vue')
+  },
 ]
 
 const router = createRouter({
