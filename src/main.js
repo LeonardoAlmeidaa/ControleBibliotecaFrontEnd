@@ -4,7 +4,7 @@ import App from './App.vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import router from './router'
-import * as Filtros from './plugins/filter'
+import * as Filtros from './plugins/filter' 
 
 import store from './store'
 import axios from 'axios'
