@@ -13,7 +13,7 @@
       >
         <option v-for="(item, index) in items" :key="index" :value="item.value">{{ item.label }}</option>
       </select>
-      <button class="clear" @click="clear" v-if="inputValue != null && !isDisabled">
+      <button class="clear" @click="clear" v-if="inputValue != null && !isDisabled && clearable">
         <i class="bi bi-x-lg"></i>
       </button>
       <div class="invalid-feedback" v-if="hasError">
@@ -36,7 +36,11 @@ export default defineComponent({
       required: Boolean,
       modelValue: String,
       isDisabled: Boolean,
-      items: Array
+      items: Array,
+      clearable: {
+        type: Boolean,
+        default: true
+      }
     },
 
     inheritAttrs: false,

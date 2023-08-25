@@ -1,4 +1,3 @@
-
 <template>
   <div class="m-3">
     <TheTitle :title="title" :breadcrumb="true" />
@@ -47,6 +46,7 @@
             divClass="col-md-3 col-xxl-3"
             label="Status"
             :items="items"
+            clearable=false
           />
           <TheTextArea
             v-model="object.obs"
@@ -94,30 +94,30 @@ export default {
     object: {},
     items: [
       { label: "Ativo", value: 1 },
-      { label: "Inativo", value: 2 },
+      { label: "Inativo", value: 0 },
     ],
     genders: [
-      { label: "Ficção Científica", value: 1 },
-      { label: "Fantasia", value: 2 },
-      { label: "Mistério", value: 3 },
-      { label: "Suspense", value: 4 },
-      { label: "Romance", value: 5 },
-      { label: "Drama", value: 6 },
-      { label: "Aventura", value: 7 },
-      { label: "Histórico", value: 8 },
-      { label: "Policial", value: 9 },
-      { label: "Terror", value: 10 },
-      { label: "Não Ficção", value: 11 },
-      { label: "Autoajuda", value: 12 },
-      { label: "Biografia", value: 13 },
-      { label: "Poesia", value: 14 },
-      { label: "Quadrinhos", value: 15 },
-      { label: "Infantil", value: 16 },
-      { label: "Jovem Adulto", value: 17 },
-      { label: "Clássicos", value: 18 },
-      { label: "Filosofia", value: 19 },
-      { label: "Ciência", value: 20 },
-      { label: "Técnico", value: 21 },
+      { label: "Ficção Científica", value: "Ficção Científica" },
+      { label: "Fantasia", value: "Fantasia" },
+      { label: "Mistério", value: "Mistério" },
+      { label: "Suspense", value: "Suspense" },
+      { label: "Romance", value: "Romance" },
+      { label: "Drama", value: "Drama" },
+      { label: "Aventura", value: "Aventura" },
+      { label: "Histórico", value: "Histórico" },
+      { label: "Policial", value: "Policial" },
+      { label: "Terror", value: "Terror" },
+      { label: "Não Ficção", value: "Não Ficção" },
+      { label: "Autoajuda", value: "Autoajuda" },
+      { label: "Biografia", value: "Biografia" },
+      { label: "Poesia", value: "Poesia" },
+      { label: "Quadrinhos", value: "Quadrinhos" },
+      { label: "Infantil", value: "Infantil" },
+      { label: "Jovem Adulto", value: "Jovem Adulto" },
+      { label: "Clássicos", value: "Clássicos" },
+      { label: "Filosofia", value: "Filosofia" },
+      { label: "Ciência", value: "Ciência" },
+      { label: "Técnico", value: "Técnico" },
     ],
     route: "book",
     title: null,
@@ -150,9 +150,10 @@ export default {
   },
 
   async submitForm() {
-    if (await validateForm(this.$refs.form)) {
-      this.save();
-    }
+    // if (await validateForm(this.$refs.form)) {
+    //   this.save();
+    // }
+    this.save();
   },
 
   async saveAndKeep() {
@@ -181,10 +182,86 @@ export default {
           this.modalError.show();
         }
       }
+    } else {
+      this.modalNotLogged.show();
+    }
+  },
+
+  async save() {
+    if (await checkSession()) {
+      this.object.status ? (this.object.status = 1) : (this.object.status = 0);
+
+      if (this.object.id) {
+        const result = await update(
+          this.route,
+          this.$route.params.id,
+          this.object
+        );
+
+        if (result.status) {
+          if (result.status != "204") {
+            this.modalBody = result.response.data;
+            this.modalError.show();
+          } else {
+            this.$store.dispatch("setShowToast", true);
+            this.$store.dispatch(
+              "setToastMessage",
+              "Livro alterado com sucesso !"
+            );
+            this.$router.back();
+          }
+        } else {
+          this.modalBody = result.response.data;
+          this.modalError.show();
+        }
+      } else {
+        const result = await insert(this.route, this.object);
+
+        if (result.status) {
+          if (result.status != "204") {
+            this.modalBody = result.response.data;
+            this.modalError.show();
+          } else {
+            this.$store.dispatch("setShowToast", true);
+            this.$store.dispatch(
+              "setToastMessage",
+              "Livro criado com sucesso !"
+            );
+            this.$router.back();
+          }
+        } else {
+          this.modalBody = result.response.data;
+          this.modalError.show();
+        }
+      }
+    } else {
+      this.modalNotLogged.show();
+    }
+  },
+  logout() {
+    logout(this);
+  },
+
+  mounted() {
+    this.$route.name == "livroUpdate"
+      ? (this.title = "Edição de Livro")
+      : (this.title = "Cadastro de Livros");
+    this.modalNotLogged = new Modal(
+      this.$refs.modalNotLogged.$refs.modalPattern
+    );
+    this.modalError = new Modal(this.$refs.modalError.$refs.modalPattern);
+
+    !this.object.status ? this.object.status = 1 : ""
+  },
+
+  async created() {
+    const id = this.$route.params.id;
+
+    if (id) {
+      await this.loadItem(id);
     }
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>

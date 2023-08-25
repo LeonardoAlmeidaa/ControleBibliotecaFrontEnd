@@ -28,6 +28,21 @@ const routes = [
     name: 'livroUpdate',
     component: () => import('@/views/LivrosNew.vue')
   },
+  {
+    path: '/usuarios',
+    name: 'usuarios',
+    component: () => import('@/views/Usuario.vue')
+  },
+  {
+    path: '/usuario/cadastro/novo',
+    name: 'usuariosNew',
+    component: () => import('@/views/UsuariosNew.vue')
+  },
+  {
+    path: '/usuario/:id/editar',
+    name: 'usuarioUpdate',
+    component: () => import('@/views/UsuariosNew.vue')
+  },
 ]
 
 const router = createRouter({

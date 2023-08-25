@@ -104,6 +104,13 @@ export default {
             icon: "bi bi-circle",
             children: [],
           },
+          {
+            code: "usuarios",
+            title: "Usuários",
+            status: false,
+            icon: "bi bi-circle",
+            children: [],
+          },
         ],
       },
       {
@@ -113,7 +120,7 @@ export default {
         icon: "bi bi-gear-fill",
         children: [
           {
-            code: "user",
+            code: "usuarios",
             title: "Usuários",
             icon: "bi bi-circle",
             child: "userGroup",

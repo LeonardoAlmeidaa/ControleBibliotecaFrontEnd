@@ -56,6 +56,7 @@
               </div>
             </template>
           </TheTable>
+          <TheLoader v-if="loader"/>
           <TheButton
             label="Novo"
             color="primary"
@@ -93,6 +94,7 @@ export default {
     limit: null,
     pages: null,
     actualPage: null,
+    loader: false,
   }),
 
   methods: {
@@ -126,6 +128,10 @@ export default {
       };
       this.$router.push(route);
     },
+
+    logout() {
+      logout(this)
+    }
   },
 
   async mounted() {
