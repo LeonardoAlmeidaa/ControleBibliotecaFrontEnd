@@ -15,7 +15,42 @@
             v-model="actualPage"
             v-if="!loader"
           >
+            <template v-slot:name="{ item }">
+              {{ item.name }}
+            </template>
+            <template v-slot:email="{ item }">
+              {{ item.email }}
+            </template>
+            <template v-slot:status="{ item }">
+              <TheChip
+                :color="getStatusColor(item.status)"
+                :text="translateStatusText(item.status)"
+              >
+                {{ item.status }}
+              </TheChip>
+            </template>
+            <template v-slot:actions="{ item }">
+              <div class="text center">
+                <i
+                  class="bi bi-pencil-fill text-secondary px-1"
+                  style="cursor: pointer"
+                  @click="edit(item.id)"
+                ></i>
+                <i
+                  class="bi bi-trash-fill text-danger px-1"
+                  style="cursor: pointer"
+                  @click="removeConfirm(item)"
+                ></i>
+              </div>
+            </template>
           </TheTable>
+          <TheLoader v-if="loader" />
+          <TheButton
+            label="Novo"
+            color="primary"
+            icon="bi bi-plus-lg"
+            @click="$router.push({ name: 'usuariosNew' })"
+          />
         </div>
       </div>
     </div>
@@ -26,6 +61,8 @@
 <script>
 import { checkSession, logout } from "@/rule/functions";
 import { Modal } from "bootstrap";
+import { get } from "@/crud";
+
 export default {
   name: "usuarios",
 

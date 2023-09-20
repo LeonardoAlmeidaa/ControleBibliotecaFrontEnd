@@ -46,7 +46,7 @@
             divClass="col-md-3 col-xxl-3"
             label="Status"
             :items="items"
-            clearable=false
+            clearable="false"
           />
           <TheTextArea
             v-model="object.obs"
@@ -147,99 +147,99 @@ export default {
         this.modalMessage.show();
       }
     },
-  },
-
-  async submitForm() {
-    // if (await validateForm(this.$refs.form)) {
-    //   this.save();
-    // }
-    this.save();
-  },
-
-  async saveAndKeep() {
-    if (await checkSession()) {
+    async submitForm() {
       if (await validateForm(this.$refs.form)) {
+        this.save();
+      }
+    },
+
+    async saveAndKeep() {
+      if (await checkSession()) {
+        if (await validateForm(this.$refs.form)) {
+          this.object.status
+            ? (this.object.status = 1)
+            : (this.object.status = 0);
+
+          const result = await insert(this.route, this.object);
+
+          if (result.status) {
+            if (result.status != "204") {
+              this.modalBody = result.response.data;
+              this.modalError.show();
+            } else {
+              this.$store.dispatch("setShowToast", true);
+              this.$store.dispatch(
+                "setToastMessage",
+                "Livro criado com sucesso !"
+              );
+              this.object = {};
+            }
+          } else {
+            this.modalBody = result.response.data;
+            this.modalError.show();
+          }
+        }
+      } else {
+        this.modalNotLogged.show();
+      }
+    },
+
+    async save() {
+      if (await checkSession()) {
         this.object.status
           ? (this.object.status = 1)
           : (this.object.status = 0);
 
-        const result = await insert(this.route, this.object);
+        if (this.object.id) {
+          const result = await update(
+            this.route,
+            this.$route.params.id,
+            this.object
+          );
 
-        if (result.status) {
-          if (result.status != "204") {
+          if (result.status) {
+            if (result.status != "204") {
+              this.modalBody = result.response.data;
+              this.modalError.show();
+            } else {
+              this.$store.dispatch("setShowToast", true);
+              this.$store.dispatch(
+                "setToastMessage",
+                "Livro alterado com sucesso !"
+              );
+              this.$router.back();
+            }
+          } else {
             this.modalBody = result.response.data;
             this.modalError.show();
-          } else {
-            this.$store.dispatch("setShowToast", true);
-            this.$store.dispatch(
-              "setToastMessage",
-              "Livro criado com sucesso !"
-            );
-            this.object = {};
           }
         } else {
-          this.modalBody = result.response.data;
-          this.modalError.show();
-        }
-      }
-    } else {
-      this.modalNotLogged.show();
-    }
-  },
+          const result = await insert(this.route, this.object);
 
-  async save() {
-    if (await checkSession()) {
-      this.object.status ? (this.object.status = 1) : (this.object.status = 0);
-
-      if (this.object.id) {
-        const result = await update(
-          this.route,
-          this.$route.params.id,
-          this.object
-        );
-
-        if (result.status) {
-          if (result.status != "204") {
+          if (result.status) {
+            if (result.status != "204") {
+              this.modalBody = result.response.data;
+              this.modalError.show();
+            } else {
+              this.$store.dispatch("setShowToast", true);
+              this.$store.dispatch(
+                "setToastMessage",
+                "Livro criado com sucesso !"
+              );
+              this.$router.back();
+            }
+          } else {
             this.modalBody = result.response.data;
             this.modalError.show();
-          } else {
-            this.$store.dispatch("setShowToast", true);
-            this.$store.dispatch(
-              "setToastMessage",
-              "Livro alterado com sucesso !"
-            );
-            this.$router.back();
           }
-        } else {
-          this.modalBody = result.response.data;
-          this.modalError.show();
         }
       } else {
-        const result = await insert(this.route, this.object);
-
-        if (result.status) {
-          if (result.status != "204") {
-            this.modalBody = result.response.data;
-            this.modalError.show();
-          } else {
-            this.$store.dispatch("setShowToast", true);
-            this.$store.dispatch(
-              "setToastMessage",
-              "Livro criado com sucesso !"
-            );
-            this.$router.back();
-          }
-        } else {
-          this.modalBody = result.response.data;
-          this.modalError.show();
-        }
+        this.modalNotLogged.show();
       }
-    } else {
-      this.modalNotLogged.show();
-    }
-  },
-  logout() {
-    logout(this);
+    },
+    logout() {
+      logout(this);
+    },
   },
 
   mounted() {
@@ -251,7 +251,7 @@ export default {
     );
     this.modalError = new Modal(this.$refs.modalError.$refs.modalPattern);
 
-    !this.object.status ? this.object.status = 1 : ""
+    !this.object.status ? (this.object.status = 1) : "";
   },
 
   async created() {
