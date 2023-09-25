@@ -34,7 +34,7 @@
             divClass="col-md-3 col-xxl-3"
             label="Status"
             :items="items"
-            clearable="false"
+            clearable=false
           />
           <TheTextArea
             v-model="object.obs"
@@ -66,7 +66,7 @@
       modalTitle="Falha ao adicionar o registro."
       :modalBody="modalBody"
     />
-    <TheModalNotLogged ref="modalNotLogged" @confirm="logoud" />
+    <TheModalNotLogged ref="modalNotLogged" @confirm="logout" />
   </div>
 </template>
 
@@ -142,7 +142,7 @@ export default {
             }
           } else {
             this.modalBody = result.response.data;
-            // this.modalError.show();
+            //this.modalError.show();
           }
         } else {
           this.modalNotLogged.show();
@@ -184,8 +184,6 @@ export default {
 
           if (result.status) {
             if (result.status != "204") {
-              console.log("retorno")
-              console.log(result)
               this.modalBody = result.response.data[0];
               // this.modalError.show();
             } else {

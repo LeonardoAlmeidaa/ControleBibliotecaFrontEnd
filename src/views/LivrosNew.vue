@@ -6,7 +6,6 @@
         <div class="row">
           <TheInput
             v-model="object.name"
-            ref="name"
             divClass="col-md-6 col-xxl-6"
             label="Nome"
             placeholder="Nome Livro"
@@ -14,43 +13,37 @@
           />
           <TheSelect
             v-model="object.gender"
-            ref="select"
             divClass="col-md-3 col-xxl-3"
             label="Gênero"
             :items="genders"
           />
           <TheInput
             v-model="object.quantityPages"
-            ref="quantityPages"
             divClass="col-md-3 col-xxl-3"
             label="Quantidade Páginas"
             placeholder="123"
           />
           <TheInput
             v-model="object.author"
-            ref="author"
             divClass="col-md-6 col-xxl-6"
             label="Autor"
             placeholder="George Orwell"
           />
-          <TheInput
+          <TheDate
             v-model="object.dateAcquisition"
-            ref="dateAcquisition"
             divClass="col-md-3 col-xxl-3"
             label="Data Aquisição"
             :placeholder="$filters.formatDate(Date.now())"
           />
           <TheSelect
             v-model="object.status"
-            ref="status"
             divClass="col-md-3 col-xxl-3"
             label="Status"
             :items="items"
-            clearable="false"
+            :clearable="false"
           />
           <TheTextArea
             v-model="object.obs"
-            ref="obs"
             divClass="col-12 col-xs-12 col-sm-12 col-md-12 col-xxl-12"
             label="Descrição"
           />
@@ -78,7 +71,7 @@
       modalTitle="Falha ao adicionar o registro."
       :modalBody="modalBody"
     />
-    <TheModalNotLogged ref="modalNotLogged" @confirm="logoud" />
+    <TheModalNotLogged ref="modalNotLogged" @confirm="logout" />
   </div>
 </template>
 
@@ -86,6 +79,7 @@
 import { validateForm, checkSession } from "@/rule/functions.js";
 import { Modal } from "bootstrap";
 import { insert, getById, update } from "@/crud";
+import moment from 'moment'
 
 export default {
   name: "livrosNew",
@@ -121,6 +115,7 @@ export default {
     ],
     route: "book",
     title: null,
+    modalBody: null,
   }),
 
   methods: {
@@ -129,11 +124,13 @@ export default {
         await getById(this.route, id)
           .then((res) => {
             if (res.status != 1) {
-              this.$router.push({ name: "user" });
+              this.$router.push({ name: "book" });
             } else {
               this.object = res;
               if (this.object.status == 1) {
                 this.object.status = true;
+
+                this.object.dateAcquisition = moment(this.object.dateAcquisition).format("DD/MM/YYYY");
               } else {
                 this.object.status = false;
               }
@@ -141,7 +138,7 @@ export default {
           })
           .catch((err) => {
             console.error(err);
-            this.$router.push({ name: "user" });
+            this.$router.push({ name: "book" });
           });
       } else {
         this.modalMessage.show();
@@ -153,48 +150,27 @@ export default {
       }
     },
 
-    async saveAndKeep() {
-      if (await checkSession()) {
-        if (await validateForm(this.$refs.form)) {
-          this.object.status
-            ? (this.object.status = 1)
-            : (this.object.status = 0);
-
-          const result = await insert(this.route, this.object);
-
-          if (result.status) {
-            if (result.status != "204") {
-              this.modalBody = result.response.data;
-              this.modalError.show();
-            } else {
-              this.$store.dispatch("setShowToast", true);
-              this.$store.dispatch(
-                "setToastMessage",
-                "Livro criado com sucesso !"
-              );
-              this.object = {};
-            }
-          } else {
-            this.modalBody = result.response.data;
-            this.modalError.show();
-          }
-        }
-      } else {
-        this.modalNotLogged.show();
-      }
-    },
-
     async save() {
       if (await checkSession()) {
         this.object.status
           ? (this.object.status = 1)
           : (this.object.status = 0);
 
+        this.object.dateAcquisition = moment(this.object.dateAcquisition).format("YYYY-MM-DD 00:00:00");
+
         if (this.object.id) {
+          const object = { ...this.object };
+          delete object.id;
+          delete object.deletedAt;
+          delete object.createdAt;
+          delete object.updatedAt;
+
+          console.log(this.object)
+
           const result = await update(
             this.route,
             this.$route.params.id,
-            this.object
+            object
           );
 
           if (result.status) {

@@ -56,7 +56,7 @@
               </div>
             </template>
           </TheTable>
-          <TheLoader v-if="loader"/>
+          <TheLoader v-if="loader" />
           <TheButton
             label="Novo"
             color="primary"
@@ -67,13 +67,14 @@
       </div>
     </div>
   </div>
+  <TheModalDelete ref="modalDelete" @confirm="remove" />
   <TheModalNotLogged ref="modalNotLogged" @confirm="logout" />
 </template>
 
 <script>
 import { checkSession, logout } from "@/rule/functions.js";
 import { Modal } from "bootstrap";
-import { get } from "@/crud";
+import { get, remove, update } from "@/crud";
 
 export default {
   name: "livros",
@@ -123,23 +124,43 @@ export default {
 
     edit(id) {
       const route = {
-        name: "livroUpdate",
+        name: "livrosUpdate",
         params: { id: id },
       };
       this.$router.push(route);
     },
 
+    async remove() {
+      if (await checkSession()) {
+        await remove(this.route, this.choosed.id);
+
+        this.$store.dispatch("setShowToast", true);
+        this.$store.dispatch(
+          "setToastMessage",
+          "Usuário excluído com sucesso!"
+        );
+        this.loadItems();
+      } else {
+        this.modalNotLogged.show();
+      }
+    },
+
+    removeConfirm(item) {
+      this.choosed = item;
+      this.modalDelete.show();
+    },
+
     logout() {
-      logout(this)
-    }
+      logout(this);
+    },
   },
 
   async mounted() {
+    await this.loadItems();
     this.modalNotLogged = new Modal(
       this.$refs.modalNotLogged.$refs.modalPattern
     );
-
-    await this.loadItems();
+    this.modalDelete = new Modal(this.$refs.modalDelete.$refs.modalPattern);
   },
 
   watch: {
