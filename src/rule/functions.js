@@ -60,7 +60,7 @@ export async function validateForm(ref) {
 export function getRouteName(route) {
   let theRoute = {
     usuarios: {
-      parent: 'Administração',
+      parent: 'Cadastro',
       name: 'Usuários',
       path: 'usuarios',
       childrenName: 'Cadastro de Usuário',
@@ -73,9 +73,9 @@ export function getRouteName(route) {
       name: 'Livros',
       path: 'livros',
       childrenName: 'Cadastro de Livros',
-      childrenPath: 'livroNew',
+      childrenPath: 'livrosNew',
       UpdateName: 'Edição de Livros',
-      UpdatePath: 'livroUpdate',
+      UpdatePath: 'livrosUpdate',
     },
   }
 
