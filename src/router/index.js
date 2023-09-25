@@ -25,7 +25,7 @@ const routes = [
   },
   {
     path: '/livro/:id/editar',
-    name: 'livroUpdate',
+    name: 'livrosUpdate',
     component: () => import('@/views/LivrosNew.vue')
   },
   {
