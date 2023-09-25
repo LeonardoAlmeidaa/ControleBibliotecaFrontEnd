@@ -82,7 +82,6 @@ const insert = async (route, object) => {
       return res
     })
     .catch((err) => {
-      console.log(err)
       return err
     })
 
@@ -133,7 +132,6 @@ const validateCurrentPassword = async (route, object) => {
       return res
     })
     .catch((err) => {
-      console.log(err)
       return err
     })
 
