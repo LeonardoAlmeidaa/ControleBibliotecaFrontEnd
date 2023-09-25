@@ -34,7 +34,7 @@ export default defineComponent({
       divClass: String,
       label: String,
       required: Boolean,
-      modelValue: String,
+      modelValue: [Number, String, Boolean],
       isDisabled: Boolean,
       items: Array,
       clearable: {

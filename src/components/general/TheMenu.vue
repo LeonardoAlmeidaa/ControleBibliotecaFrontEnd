@@ -5,7 +5,7 @@
   >
     <div>
       <i class="bi bi-list icon_action ps-3" @click="toggleSidebar"></i>
-      <img src="@/assets/logo.png" class="ps-3" style="width: 200px" />
+      <img src="@/assets/softwaresul_logo.png" class="ps-3" style="width: 200px" />
     </div>
     <div>
       <i
@@ -119,13 +119,13 @@ export default {
         status: false,
         icon: "bi bi-gear-fill",
         children: [
-          {
-            code: "usuarios",
-            title: "Usuários",
-            icon: "bi bi-circle",
-            child: "userGroup",
-            status: false,
-          },
+          // {
+          //   code: "usuarios",
+          //   title: "Usuários",
+          //   icon: "bi bi-circle",
+          //   child: "userGroup",
+          //   status: false,
+          // },
         ],
       },
       {
@@ -150,7 +150,6 @@ export default {
           this.$router.push({ name: "login" });
         })
         .catch((err) => {
-          console.log(err);
           return err;
         });
 
