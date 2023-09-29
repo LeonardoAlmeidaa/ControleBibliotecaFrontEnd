@@ -5,6 +5,13 @@
         <TheTitle title="Livros" :breadcrumb="true" />
       </div>
     </div>
+    <TheFilter
+      @index="handleIndex"
+      @filter="filterAll"
+      @clear="loadItems"
+      name="filterBook"
+      :filters="filterObject"
+    />
     <div class="card card-body mx-2">
       <div class="div row">
         <div class="div col-12">
@@ -80,7 +87,7 @@
 <script>
 import { checkSession, logout } from "@/rule/functions.js";
 import { Modal } from "bootstrap";
-import { get, remove, update } from "@/crud";
+import { get, remove, update, search } from "@/crud";
 
 export default {
   name: "livros",
@@ -102,18 +109,47 @@ export default {
     pages: null,
     actualPage: null,
     loader: false,
+
+    filterObject: [
+      {
+        label: "Nome",
+        ref: "bookName",
+        route: "book",
+        subRoute: "by-name",
+        param: "name",
+        type: "text",
+        index: 1,
+      },
+      {
+        label: "Autor",
+        ref: "bookAuthor",
+        route: "book",
+        subRoute: "by-author",
+        param: "author",
+        type: "text",
+        index: 2,
+      },
+    ],
+    filterOption: 1,
+    filterParam: null,
   }),
 
   methods: {
     async loadItems(page = 1) {
       if (await checkSession()) {
-        const query = {
-          params: { page: page, limit: this.limit },
-        };
+        const query = { params: { page: page, limit: this.limit } };
+        let raw = [];
+        if (this.filterParam) {
+          console.log(this.filterParam);
+          this.filterParam.params.page = page;
+          this.filterParam.params.limit = this.limit;
+          raw = await search(this.filterParam.route, this.filterParam.params);
+        } else {
+          raw = await get(this.route, query);
+        }
         this.loader = true;
-        const raw = await get(this.route, query);
-        this.loader = false;
         this.items = raw;
+        this.loader = false;
         this.pages = Math.ceil(raw.total / this.limit);
       } else {
         this.modalNotLogged.show();
@@ -156,6 +192,39 @@ export default {
       this.modalDelete.show();
     },
 
+    emitSelectedItem(item) {
+      this.$emit("selectedItem", item);
+    },
+
+    async filterAll(event) {
+      if (await checkSession()) {
+        this.filterParam = event;
+        this.loadItems(1);
+      } else {
+        this.modalNotLogged.show();
+      }
+    },
+
+    handleIndex(event) {
+      this.filterOption = event;
+    },
+
+    changeHeaders() {
+      if (this.filterOption == 1) {
+        this.headers = [
+          { title: "Nome", field: "name" },
+          { title: "Autor", field: "author" },
+          { title: "Ações", field: "actions" },
+        ];
+      } else {
+        this.headers = [
+          { title: "Autor", field: "author" },
+          { title: "Nome", field: "name" },
+          { title: "Ações", field: "actions" },
+        ];
+      }
+    },
+
     logout() {
       logout(this);
     },
@@ -170,6 +239,10 @@ export default {
   },
 
   watch: {
+    filterOption() {
+      this.loadItems();
+      this.changeHeaders();
+    },
     actualPage() {
       this.loadItems(this.actualPage);
     },
