@@ -86,6 +86,7 @@ export default {
 
   data: () => ({
     object: {},
+    
     items: [
       { label: "Ativo", value: 1 },
       { label: "Inativo", value: 0 },
@@ -129,8 +130,6 @@ export default {
               this.object = res;
               if (this.object.status == 1) {
                 this.object.status = true;
-
-                this.object.dateAcquisition = moment(this.object.dateAcquisition).format("DD/MM/YYYY");
               } else {
                 this.object.status = false;
               }
@@ -164,8 +163,6 @@ export default {
           delete object.deletedAt;
           delete object.createdAt;
           delete object.updatedAt;
-
-          console.log(this.object)
 
           const result = await update(
             this.route,

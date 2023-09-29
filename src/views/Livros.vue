@@ -25,18 +25,24 @@
               {{ item.author }}
             </template>
             <template v-slot:quantityPages="{ item }">
-              {{ item.quantityPages }}
+              <div class="text-center">
+                {{ item.quantityPages }}
+              </div>
             </template>
             <template v-slot:dateAcquisition="{ item }">
-              {{ $filters.formatDate(item.dateAcquisition) }}
+              <div class="text-center">
+                {{ $filters.formatDate(item.dateAcquisition) }}
+              </div>
             </template>
             <template v-slot:status="{ item }">
-              <TheChip
-                :color="getStatusColor(item.status)"
-                :text="translateStatusText(item.status)"
-              >
-                {{ item.status }}
-              </TheChip>
+              <div class="text-center">
+                <TheChip
+                  :color="getStatusColor(item.status)"
+                  :text="translateStatusText(item.status)"
+                >
+                  {{ item.status }}
+                </TheChip>
+              </div>
             </template>
             <template v-slot:obs="{ item }">
               {{ item.obs }}
@@ -85,8 +91,8 @@ export default {
       { title: "Nome", field: "name" },
       { title: "Gênero", field: "gender" },
       { title: "Autor", field: "author" },
-      { title: "Quantidade Páginas", field: "quantityPages" },
-      { title: "Data Aquisição", field: "dateAcquisition" },
+      { title: "Páginas", field: "quantityPages" },
+      { title: "Aquisição", field: "dateAcquisition" },
       { title: "Status", field: "status" },
       { title: "Ações", field: "actions" },
     ],
