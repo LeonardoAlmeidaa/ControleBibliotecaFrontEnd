@@ -105,7 +105,7 @@ export default {
     ],
     items: [],
     modalNotLogged: null,
-    limit: null,
+    limit: 10,
     pages: null,
     actualPage: null,
     loader: false,
@@ -147,10 +147,11 @@ export default {
         } else {
           raw = await get(this.route, query);
         }
+        console.log(raw)
         this.loader = true;
         this.items = raw;
         this.loader = false;
-        this.pages = Math.ceil(raw.total / this.limit);
+        if (this.items) {this.pages = Math.ceil(raw.total / this.limit);}
       } else {
         this.modalNotLogged.show();
       }
