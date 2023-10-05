@@ -1,13 +1,13 @@
 <template>
-  <h4>Home View</h4>
+  <div>
+      <s-title title="Teste"/>
+  </div>
 </template>
-
 <script>
 export default {
 
 }
 </script>
-
 <style>
 
 </style>

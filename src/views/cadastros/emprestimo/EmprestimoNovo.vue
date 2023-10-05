@@ -1,13 +1,13 @@
 <template>
-  <h4>Home View</h4>
-</template>
+  <div>
 
+  </div>
+</template>
 <script>
 export default {
 
 }
 </script>
-
 <style>
 
 </style>

@@ -2,14 +2,14 @@
   <div class="m-3">
     <div class="row">
       <div class="col-8">
-        <TheTitle title="Meu Perfil" :breadcrumb="true"/>
+        <s-title title="Meu Perfil" :breadcrumb="true"/>
       </div>
     </div>
     <div class="card card-body mx-2">
       <form ref="form" @submit.prevent="submitForm">
         <div class="row">
           <div class="col-6">
-            <TheInput
+            <s-input-text
               v-model="object.name"
               ref="myName"
               label="Nome"
@@ -17,7 +17,7 @@
             />
           </div>
           <div class="col-6">
-            <TheInputEmail
+            <s-input-email
               v-model="object.email"
               ref="myEmail"
               label="E-mail"
@@ -29,13 +29,13 @@
       <div class="row">
         <div class="col-12 d-flex justify-content-between">
           <div>
-            <TheButton
+            <s-button
               type="submit"
               color="primary"
               label="Salvar"
               icon="check2"
             />
-            <TheButton
+            <s-button
               type="button"
               color="primary"
               label="Alterar senha"
@@ -44,7 +44,7 @@
             />
           </div>
           <div>
-            <!-- <TheButton
+            <!-- <s-button
               type="button"
               label="Cancelar"
               color="outline-danger"
@@ -55,73 +55,80 @@
         </div>
       </div>
       </form>
-      <div class="modal fade" ref="modalUpdatePassword" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-      <form ref="form" @submit.prevent="submitFormPassword">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <div class="modal-content">
-            <div class="modal-header bg-primary">
-              <span class="fs-5 text-white">Atualização de Senha</span>
-            </div>
-            <div class="modal-body text-dark">
-              <div class="row">
-                <div class="col-12">
-                  <TheInputPassword
-                    v-model="currenntPassword"
-                    ref="currenntPassword"
-                    divClass="col-12"
-                    label="Senha Atual"
-                    placeholder="••••••••"
-                    required
-                  />
-                  <TheInputPassword
-                    v-model="object.password"
-                    ref="password"
-                    divClass="col-12"
-                    label="Nova Senha"
-                    placeholder="••••••••"
-                    required
-                  />
-                  <TheInputPassword
-                    v-model="passwordConfirm"
-                    ref="passwordConfirm"
-                    divClass="col-12"
-                    label="Confirmação Nova Senha"
-                    placeholder="••••••••"
-                    required
-                  />
-                  <div class="row">
-                    <TheRequiredLabel />
+      <div
+        class="modal fade"
+        ref="modalUpdatePassword"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        <form ref="form" @submit.prevent="submitFormPassword">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header bg-primary">
+                <span class="fs-5 text-white">Atualização de Senha</span>
+              </div>
+              <div class="modal-body text-dark">
+                <div class="row">
+                  <div class="col-12">
+                    <s-input-password
+                      v-model="currenntPassword"
+                      ref="currenntPassword"
+                      divClass="col-12"
+                      label="Senha Atual"
+                      placeholder="••••••••"
+                      required
+                    />
+                    <s-input-password
+                      v-model="object.password"
+                      ref="password"
+                      divClass="col-12"
+                      label="Nova Senha"
+                      placeholder="••••••••"
+                      required
+                    />
+                    <s-input-password
+                      v-model="passwordConfirm"
+                      ref="passwordConfirm"
+                      divClass="col-12"
+                      label="Confirmação Nova Senha"
+                      placeholder="••••••••"
+                      required
+                    />
+                    <div class="row">
+                      <s-label-required />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-between">
-              <TheButton
-                type="submit"
-                label="Alterar"
-                color="primary"
-                icon="check2"
-              />
-              <TheButton
-                type="button"
-                label="Cancelar"
-                color="outline-danger"
-                icon="x-lg"
-                data-bs-dismiss="modal"
-                @click="clearData"
-              />
+              <div class="modal-footer d-flex justify-content-between">
+                <s-button
+                  type="submit"
+                  label="Alterar"
+                  color="primary"
+                  icon="check2"
+                />
+                <s-button
+                  type="button"
+                  label="Cancelar"
+                  color="outline-danger"
+                  icon="x-lg"
+                  data-bs-dismiss="modal"
+                  @click="clearData"
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-    </div>
-    <TheModalError
+    <s-modal-error
       ref="modalError"
       modalTitle="Falha ao alterar perfil !"
       :modalBody="modalBody"
     />
-    <TheModalNotLogged
+    <s-modal-notlogged
       ref="modalNotLogged"
       @confirm="logout"
     />
@@ -130,9 +137,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import { validateForm, checkSession, logout } from '@/rule/functions.js'
-import { getById, update, validateCurrentPassword } from '@/crud.js'
-import { Modal } from 'bootstrap'
+import { validateForm, logout } from '@/rule/functions.js'
+import { getById, update, validateCurrentPassword, get } from '@/crud.js'
 
 export default {
   name: 'MyProfile',
@@ -157,7 +163,7 @@ export default {
 
   methods: {
     async loadItem() {
-      if (await checkSession()) {
+      if (await this.$checkSession()) {
         await getById(this.route, this.user.id)
         .then((res) => {
           this.object = res
@@ -170,6 +176,7 @@ export default {
           }
         })
         .catch((err) => {
+          console.log(err)
           this.$router.push({ name: "myProfile" })
         })
       }
@@ -197,6 +204,8 @@ export default {
             this.$store.dispatch('setShowToast', true)
             this.$store.dispatch('setToastMessage', 'Dados alterados com sucesso !')
             await this.loadItem()
+            const rawUser = await get('me')
+            this.$store.dispatch('setUser', rawUser)
           }
         }
 
@@ -205,6 +214,7 @@ export default {
           this.modalError.show()
         }
       }
+
     },
 
     async submitFormPassword() {
@@ -225,7 +235,7 @@ export default {
         }
 
         else {
-          this.modalErrorBody = "A senha atual informada está incorreta. Por favor, verifique."
+          this.modalBody = "A senha atual informada está incorreta. Por favor, verifique."
           this.modalError.show()
         }
       }
@@ -286,9 +296,9 @@ export default {
   },
 
   async mounted() {
-    this.modalError = new Modal(this.$refs.modalError.$refs.modalPattern)
-    this.modalNotLogged = new Modal(this.$refs.modalNotLogged.$refs.modalPattern)
-    this.modalUpdatePassword = new Modal(this.$refs.modalUpdatePassword)
+    this.modalError = new this.$Modal(this.$refs.modalError.$refs.modalPattern)
+    this.modalNotLogged = new this.$Modal(this.$refs.modalNotLogged.$refs.modalPattern)
+    this.modalUpdatePassword = new this.$Modal(this.$refs.modalUpdatePassword)
   },
 
   async created() {
