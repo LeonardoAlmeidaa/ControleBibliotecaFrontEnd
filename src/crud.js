@@ -37,24 +37,6 @@ const getById = async (route, id) => {
   return result
 }
 
-// const search = async (route, objectParams) => {
-//   let url = `${baseApiUrl}/${route}`
-
-//   axios.defaults.withCredentials = true
-
-//   const result = await axios
-//     .post(url, objectParams)
-//     .then((res) => {
-//       return res.data
-//     })
-//     .catch((err) => {
-//       console.log(err)
-//       return null
-//     })
-
-//   return result
-// }
-
 const search = async (route, objectParams) => {
   let url = `${baseApiUrl}/${route}`
 
@@ -82,6 +64,7 @@ const insert = async (route, object) => {
       return res
     })
     .catch((err) => {
+      console.log(err)
       return err
     })
 
@@ -132,6 +115,7 @@ const validateCurrentPassword = async (route, object) => {
       return res
     })
     .catch((err) => {
+      console.log(err)
       return err
     })
 

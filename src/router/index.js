@@ -13,35 +13,59 @@ const routes = [
     name: 'home',
     component: Home
   },
+  /* ########## USUARIO ########## */
   {
-    path: '/livros',
-    name: 'livros',
-    component: () => import('@/views/Livros.vue')
+    path: '/administracao/usuario',
+    name: 'user',
+    component: () => import('@/views/administracao/usuario/Usuario.vue')
   },
   {
-    path: '/livro/cadastro/novo',
-    name: 'livrosNew',
-    component: () => import('@/views/LivrosNew.vue')
+    path: '/administracao/usuario/cadastro/novo',
+    name: 'userNew',
+    component: () => import('@/views/administracao/usuario/UsuarioNovo.vue')
   },
   {
-    path: '/livro/:id/editar',
-    name: 'livrosUpdate',
-    component: () => import('@/views/LivrosNew.vue')
+    path: '/administracao/usuario/:id/editar',
+    name: 'userUpdate',
+    component: () => import('@/views/administracao/usuario/UsuarioNovo.vue')
+  },
+  /* ########## LIVRO ########## */
+  {
+    path: '/cadastros/livro',
+    name: 'book',
+    component: () => import('@/views/cadastros/livro/Livro.vue')
   },
   {
-    path: '/usuarios',
-    name: 'usuarios',
-    component: () => import('@/views/Usuario.vue')
+    path: '/cadastros/livro/cadastro/novo',
+    name: 'bookNew',
+    component: () => import('@/views/cadastros/livro/LivroNovo.vue')
   },
   {
-    path: '/usuario/cadastro/novo',
-    name: 'usuariosNew',
-    component: () => import('@/views/UsuariosNew.vue')
+    path: '/cadastros/livro/:id/editar',
+    name: 'bookUpdate',
+    component: () => import('@/views/cadastros/livro/LivroNovo.vue')
+  },
+  /* ########## EMPRÉSTIMO ########## */
+  {
+    path: '/cadastros/',
+    name: 'loan',
+    component: () => import('@/views/cadastros/emprestimo/Emprestimo.vue')
   },
   {
-    path: '/usuario/:id/editar',
-    name: 'usuarioUpdate',
-    component: () => import('@/views/UsuariosNew.vue')
+    path: '/cadastros/emprestimo/cadastro/novo',
+    name: 'loanNew',
+    component: () => import('@/views/cadastros/emprestimo/EmprestimoNovo.vue')
+  },
+  {
+    path: '/cadastros/emprestimo/:id/editar',
+    name: 'loanUpdate',
+    component: () => import('@/views/cadastros/emprestimo/EmprestimoNovo.vue')
+  },
+  /* ########## PERFIL ########## */
+  {
+    path: '/meu_perfil',
+    name: 'myProfile',
+    component: () => import('@/views/Perfil.vue')
   },
 ]
 

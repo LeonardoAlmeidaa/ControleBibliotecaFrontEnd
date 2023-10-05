@@ -1,104 +1,83 @@
-/*
-export function validateForm(ref) {
-  if (!ref) {
-    return false
-  }
-
-  const el = ref.getElementsByTagName('input')
-  let valid = true
-
-  Array.from(el).forEach((element) => {
-    element.focus()
-    element.blur()
-    if (element.className.includes('is-invalid') || element.value == '') { valid = false; }
-  })
-
-  return valid;
-}
-*/
-
 import { nextTick } from 'vue'
+import store from '@/store/index'
 
 export async function validateForm(ref) {
-  if (!ref) {
-    return false
-  }
+  if (!ref) { return false }
 
-  const elInput = ref.getElementsByTagName('input')
-  const elSelect = ref.getElementsByTagName('select')
+  const elementInput = ref.getElementsByTagName('input')
+  const elementSelect = ref.getElementsByTagName('select')
   let valid = true
   let countInvalid = 0
 
-  for (let i = 0; i < elInput.length; i++) {
-    const element = elInput[i]
+  for (let i = 0; i < elementInput.length; i++) {
+    const element = elementInput[i]
     element.focus()
     element.blur()
     await nextTick()
 
     if (element.className.includes('is-invalid') || element.className.includes('dp-custom-input')) {
-
       countInvalid++
     }
   }
 
-  for (let i = 0; i < elSelect.length; i++) {
-    const element = elSelect[i]
+  for (let i = 0; i < elementSelect.length; i++) {
+    const element = elementSelect[i]
     element.focus()
     element.blur()
     await nextTick()
 
     if (element.className.includes('is-invalid')) {
-
       countInvalid++
     }
   }
 
   if (countInvalid > 0) { valid = false }
-  return valid;
+  return valid
 }
 
 export function getRouteName(route) {
   let theRoute = {
-    usuarios: {
-      parent: 'Cadastro',
+    user: {
+      parent: 'Administração',
       name: 'Usuários',
-      path: 'usuarios',
+      path: 'user',
       childrenName: 'Cadastro de Usuário',
-      childrenPath: 'usuariosNew',
+      childrenPath: 'userNew',
       UpdateName: 'Edição de Usuário',
-      UpdatePath: 'usuarioUpdate',
+      UpdatePath: 'userUpdate',
     },
-    livros: {
-      parent: 'Cadastro',
+    book: {
+      parent: 'Cadastros',
       name: 'Livros',
-      path: 'livros',
-      childrenName: 'Cadastro de Livros',
-      childrenPath: 'livrosNew',
-      UpdateName: 'Edição de Livros',
-      UpdatePath: 'livrosUpdate',
+      path: 'book',
+      childrenName: 'Cadastro de Livro',
+      childrenPath: 'bookNew',
+      UpdateName: 'Edição de Livro',
+      UpdatePath: 'bookUpdate',
     },
+    loan: {
+      parent: 'Cadastros',
+      name: 'Emprestimos',
+      path: 'loan',
+      childrenName: 'Cadastro de Emprestimo',
+      childrenPath: 'loanNew',
+      UpdateName: 'Edição de Empréstimo',
+      UpdatePath: 'loanUpdate',
+    },
+    myProfile: {
+      parent: '',
+      name: '',
+      path: '',
+      childrenName: '',
+      childrenPath: '',
+      UpdateName: '',
+      UpdatePath: '',
+    }
   }
 
-  if (route in theRoute) {
-    return theRoute[route];
-  } else if (route.split('New')[0] in theRoute) {
-    return theRoute[route.split('New')[0]];
-  } else {
-    return theRoute[route.split('Update')[0]];
-  }
-}
-
-import { get } from '@/crud.js'
-export async function checkSession() {
-  const rawUser = await get('me')
-
-  if (!rawUser || rawUser == '') {
-    return false
-  }
-
-  else {
-    return true
-  }
+  if (route in theRoute) { return theRoute[route] }
+  else if (route.split('New')[0] in theRoute) { return theRoute[route.split('New')[0]] }
+  else { return theRoute[route.split('Update')[0]] }
 }
 
 export function logout(vueInstance) {
@@ -112,18 +91,9 @@ export function cleanObject(object) {
     delete object.createdAt
     delete object.deletedAt
     delete object.updatedAt
-  } else if (object.referralDate){
-    delete object.id
-    delete object.referralDate
-    delete object.createdAt
-    delete object.deletedAt
-    delete object.updatedAt
-  } else if(object.password || object.idVehicle || object.pavement){
-    delete object.status
-    delete object.createdAt
-    delete object.deletedAt
-    delete object.updatedAt
-  } else {
+  }
+
+  else {
     delete object.id
     delete object.status
     delete object.createdAt
@@ -132,8 +102,26 @@ export function cleanObject(object) {
   }
 }
 
-/*
-export function function02() {
-  return alert()
+let firstTry = false
+import { get } from '@/crud.js'
+export async function checkSession() {
+
+  let rawUser = null
+
+  if (!firstTry) {
+    rawUser = await get('me')
+    firstTry = true
+  }
+
+  else {
+    const state = JSON.parse(JSON.stringify(store.state))
+    rawUser = state.user
+  }
+
+  if (!rawUser || rawUser == '') { return false }
+  else {
+    store.dispatch('setLogged', true)
+    store.dispatch('setUser', rawUser)
+    return true
+  }
 }
-*/
