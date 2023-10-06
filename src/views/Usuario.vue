@@ -1,20 +1,14 @@
 <template>
   <div class="m-3">
-    <div class="row">
+    <div class="row" v-if="!zoom">
       <div class="col-12">
-        <TheTitle title="Usuários" :breadcrumb="true" />
+        <s-title title="Usuários" :breadcrumb="true" />
       </div>
     </div>
     <div class="card card-body mx-2">
       <div class="div row">
         <div class="div col-12">
-          <TheTable
-            :headers="headers"
-            :items="items"
-            :totalPages="pages"
-            v-model="actualPage"
-            v-if="!loader"
-          >
+          <s-table :headers="headers" :items="items" :totalPages="pages" v-model="actualPage" v-if="!loader">
             <template v-slot:name="{ item }">
               {{ item.name }}
             </template>
@@ -22,39 +16,30 @@
               {{ item.email }}
             </template>
             <template v-slot:status="{ item }">
-              <TheChip
-                :color="getStatusColor(item.status)"
-                :text="translateStatusText(item.status)"
-              >
-                {{ item.status }}
-              </TheChip>
-            </template>
-            <template v-slot:actions="{ item }">
-              <div class="text center">
-                <i
-                  class="bi bi-pencil-fill text-secondary px-1"
-                  style="cursor: pointer"
-                  @click="edit(item.id)"
-                ></i>
-                <i
-                  class="bi bi-trash-fill text-danger px-1"
-                  style="cursor: pointer"
-                  @click="removeConfirm(item)"
-                ></i>
+              <div class="text-center">
+                <s-chip :color="getStatusColor(item.status)" :text="translateStatusText(item.status)">
+                  {{ item.status }}
+                </s-chip>
               </div>
             </template>
-          </TheTable>
-          <TheLoader v-if="loader" />
-          <TheButton
-            label="Novo"
-            color="primary"
-            icon="bi bi-plus-lg"
-            @click="$router.push({ name: 'usuariosNew' })"
-          />
+            <template v-slot:actions="{ item }">
+              <div class="text-center" v-if="!zoom">
+                <i class="bi bi-pencil-fill text-secondary px-1" style="cursor: pointer" @click="edit(item.id)"></i>
+                <i class="bi bi-trash-fill text-danger px-1" style="cursor: pointer" @click="removeConfirm(item)"></i>
+              </div>
+              <div class="text-center" v-if="zoom">
+                <s-button label="Selecionar" color="primary" @click="emitSelectedItem(item)" type="button">
+                </s-button>
+              </div>
+            </template>
+          </s-table>
+          <s-loader v-if="loader" />
+          <s-button v-if="!zoom" label="Novo" color="primary" icon="bi bi-plus-lg"
+            @click="$router.push({ name: 'usuariosNew' })" />
         </div>
       </div>
     </div>
-    <TheModalNotLogged ref="modalNotLogged" @confirm="logout" />
+    <s-modal-notlogged ref="modalNotLogged" @confirm="logout" />
   </div>
 </template>
 
@@ -65,6 +50,14 @@ import { get } from "@/crud";
 
 export default {
   name: "usuarios",
+
+  props: {
+    zoom: {
+      type: Boolean,
+      default: false,
+    },
+    valueZoom: String,
+  },
 
   data: () => ({
     route: "user",
@@ -96,6 +89,10 @@ export default {
       } else {
         this.modalNotLogged.show();
       }
+    },
+
+    emitSelectedItem(item) {
+      this.$emit("selectedItem", item)
     },
 
     getStatusColor(status) {
@@ -135,5 +132,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
