@@ -45,22 +45,6 @@ const routes = [
     name: 'bookUpdate',
     component: () => import('@/views/cadastros/livro/LivroNovo.vue')
   },
-  /* ########## EMPRÉSTIMO ########## */
-  {
-    path: '/cadastros/',
-    name: 'loan',
-    component: () => import('@/views/cadastros/emprestimo/Emprestimo.vue')
-  },
-  {
-    path: '/cadastros/emprestimo/cadastro/novo',
-    name: 'loanNew',
-    component: () => import('@/views/cadastros/emprestimo/EmprestimoNovo.vue')
-  },
-  {
-    path: '/cadastros/emprestimo/:id/editar',
-    name: 'loanUpdate',
-    component: () => import('@/views/cadastros/emprestimo/EmprestimoNovo.vue')
-  },
   /* ########## PERFIL ########## */
   {
     path: '/meu_perfil',

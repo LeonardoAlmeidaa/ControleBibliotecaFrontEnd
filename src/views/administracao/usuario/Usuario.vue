@@ -40,12 +40,15 @@
                 <i
                   class="bi bi-lock-fill text-secondary px-1"
                   style="cursor: pointer"
+                  v-if="user.email != item.email"
                   @click="showModalUpdatePassword(item)"></i>
                 <i
+                  v-if="user.email != item.email"
                   class="bi bi-pencil-fill text-secondary px-1"
                   style="cursor: pointer"
                   @click="edit(item.id)"></i>
                 <i
+                  v-if="user.email != item.email"
                   class="bi bi-trash-fill text-danger px-1"
                   style="cursor: pointer"
                   @click="removeConfirm(item)"></i>

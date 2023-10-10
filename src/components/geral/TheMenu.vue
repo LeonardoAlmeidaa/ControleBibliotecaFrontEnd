@@ -62,12 +62,6 @@ export default {
             icon: 'bi bi-circle',
             status: false,
           },
-          {
-            code: 'loan',
-            title: 'Empréstimo',
-            icon: 'bi bi-circle',
-            status: false,
-          },
         ],
       },
       {

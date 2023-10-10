@@ -33,7 +33,7 @@ export default defineComponent({
       divClass: String,
       label: String,
       required: Boolean,
-      modelValue: [String, Number],
+      modelValue: String,
       isDisabled: Boolean,
       items: Array,
       clearable: Boolean,

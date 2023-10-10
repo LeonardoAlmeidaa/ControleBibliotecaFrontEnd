@@ -55,15 +55,6 @@ export function getRouteName(route) {
       UpdateName: 'Edição de Livro',
       UpdatePath: 'bookUpdate',
     },
-    loan: {
-      parent: 'Cadastros',
-      name: 'Emprestimos',
-      path: 'loan',
-      childrenName: 'Cadastro de Emprestimo',
-      childrenPath: 'loanNew',
-      UpdateName: 'Edição de Empréstimo',
-      UpdatePath: 'loanUpdate',
-    },
     myProfile: {
       parent: '',
       name: '',
