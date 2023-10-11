@@ -1,27 +1,16 @@
 <template>
   <div class="m-3">
-    <div class="row">
+    <div class="row" v-if="!zoom">
       <div class="col-8">
         <s-title title="Usuários" :breadcrumb="true" />
       </div>
     </div>
-    <s-input-filter
-      @index="handleIndex"
-      @filter="filterAll"
-      @clear="loadItems"
-      name="filterWorkMeasurement"
-      :filters="filterObject"
-    />
+    <s-input-filter @index="handleIndex" @filter="filterAll" @clear="loadItems" name="filterWorkMeasurement"
+      :filters="filterObject" />
     <div class="card card-body mx-2">
       <div class="row">
         <div class="col-12">
-          <s-table
-            v-model="actualPage"
-            :headers="headers"
-            :items="items"
-            :totalPages="pages"
-            v-if="!loader"
-          >
+          <s-table v-model="actualPage" :headers="headers" :items="items" :totalPages="pages" v-if="!loader">
             <template v-slot:name="{ item }">
               {{ item.name }}
             </template>
@@ -36,46 +25,29 @@
               </h5>
             </template>
             <template v-slot:actions="{ item }">
-              <div class="text-center">
-                <i
-                  class="bi bi-lock-fill text-secondary px-1"
-                  style="cursor: pointer"
-                  v-if="user.email != item.email"
+              <div class="text-center" v-if="!zoom">
+                <i class="bi bi-lock-fill text-secondary px-1" style="cursor: pointer" v-if="user.email != item.email"
                   @click="showModalUpdatePassword(item)"></i>
-                <i
-                  v-if="user.email != item.email"
-                  class="bi bi-pencil-fill text-secondary px-1"
-                  style="cursor: pointer"
+                <i v-if="user.email != item.email" class="bi bi-pencil-fill text-secondary px-1" style="cursor: pointer"
                   @click="edit(item.id)"></i>
-                <i
-                  v-if="user.email != item.email"
-                  class="bi bi-trash-fill text-danger px-1"
-                  style="cursor: pointer"
+                <i v-if="user.email != item.email" class="bi bi-trash-fill text-danger px-1" style="cursor: pointer"
                   @click="removeConfirm(item)"></i>
+              </div>
+              <div class="text-center" v-if="zoom">
+                <s-button title="Selecionar" color="primary" type="button" @click="emitSelectedItem(item)" />
               </div>
             </template>
           </s-table>
         </div>
         <div class="col-12" v-if="!loader">
-          <s-button
-            type="button"
-            label="Novo"
-            color="primary"
-            icon="plus-lg"
-            @click="this.$router.push({ name: 'userNew' })"
-          />
+          <s-button type="button" v-if="!zoom" label="Novo" color="primary" icon="plus-lg"
+            @click="this.$router.push({ name: 'userNew' })" />
         </div>
       </div>
       <!-- <TheLoader v-if="loader" /> -->
     </div>
-    <div
-      class="modal fade"
-      ref="modalUpdatePassword"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-hidden="true"
-    >
+    <div class="modal fade" ref="modalUpdatePassword" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-hidden="true">
       <form ref="form" @submit.prevent="submitForm">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
@@ -85,31 +57,12 @@
             <div class="modal-body text-dark">
               <div class="row">
                 <div class="col-12">
-                  <s-input-password
-                    v-if="selectedItem && user.email === selectedItem.email"
-                    v-model="currenntPassword"
-                    ref="currenntPassword"
-                    divClass="col-12"
-                    label="Senha Atual"
-                    placeholder="••••••••"
-                    required
-                  />
-                  <s-input-password
-                    v-model="object.password"
-                    ref="password"
-                    divClass="col-12"
-                    label="Nova Senha"
-                    placeholder="••••••••"
-                    required
-                  />
-                  <s-input-password
-                    v-model="passwordConfirm"
-                    ref="passwordConfirm"
-                    divClass="col-12"
-                    label="Confirmação Nova Senha"
-                    placeholder="••••••••"
-                    required
-                  />
+                  <s-input-password v-if="selectedItem && user.email === selectedItem.email" v-model="currenntPassword"
+                    ref="currenntPassword" divClass="col-12" label="Senha Atual" placeholder="••••••••" required />
+                  <s-input-password v-model="object.password" ref="password" divClass="col-12" label="Nova Senha"
+                    placeholder="••••••••" required />
+                  <s-input-password v-model="passwordConfirm" ref="passwordConfirm" divClass="col-12"
+                    label="Confirmação Nova Senha" placeholder="••••••••" required />
                   <div class="row">
                     <s-label-required />
                   </div>
@@ -118,14 +71,8 @@
             </div>
             <div class="modal-footer d-flex justify-content-between">
               <s-button type="submit" label="Salvar" color="primary" icon="check2" />
-              <s-button
-                type="button"
-                label="Cancelar"
-                color="outline-danger"
-                icon="x-lg"
-                data-bs-dismiss="modal"
-                @click="clearData"
-              />
+              <s-button type="button" label="Cancelar" color="outline-danger" icon="x-lg" data-bs-dismiss="modal"
+                @click="clearData" />
             </div>
           </div>
         </div>
@@ -144,6 +91,14 @@ import { get, remove, update, validateCurrentPassword, search } from '@/crud.js'
 
 export default {
   name: 'User',
+
+  props: {
+    zoom: {
+      type: Boolean,
+      default: false,
+    },
+    valueZoom: String,
+  },
 
   data: () => ({
     route: 'user',
@@ -171,27 +126,27 @@ export default {
     limit: 10,
 
     filterObject: [
-      { 
-        label: 'Nome', 
-        ref: 'userName', 
-        route: 'user', 
-        subRoute: 'by-name', 
-        param: 'name', 
-        type: 'text', 
+      {
+        label: 'Nome',
+        ref: 'userName',
+        route: 'user',
+        subRoute: 'by-name',
+        param: 'name',
+        type: 'text',
         signal: '',
         operator: 'LIKE',
-        index: 1 
+        index: 1
       },
-      { 
-        label: 'E-mail', 
-        ref: 'userMail', 
-        route: 'user', 
-        subRoute: 'by-email', 
-        param: 'email', 
-        type: 'text', 
+      {
+        label: 'E-mail',
+        ref: 'userMail',
+        route: 'user',
+        subRoute: 'by-email',
+        param: 'email',
+        type: 'text',
         signal: '',
         operator: 'LIKE',
-        index: 2 
+        index: 2
       },
       {
         label: 'Status',
@@ -271,6 +226,10 @@ export default {
       }
 
       this.$router.push(route)
+    },
+
+    emitSelectedItem(item) {
+      this.$emit("selectedItem", item)
     },
 
     showModalUpdatePassword(item) {
@@ -393,7 +352,7 @@ export default {
     this.modalNotLogged = new this.$Modal(this.$refs.modalNotLogged.$refs.modalPattern)
     this.modalError = new this.$Modal(this.$refs.modalError.$refs.modalPattern)
     this.modalUpdatePassword = new this.$Modal(this.$refs.modalUpdatePassword)
-    
+
     await this.loadItems()
   },
 
