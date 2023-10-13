@@ -2,6 +2,9 @@ const validateRequired = (value, required, object, messageRequired, minLength, m
   if (!value && required) {
     setError(object, messageRequired)
     return false
+  } else if (value && typeof (value) == 'number') {
+    setValid(object)
+    return true
   }
 
   else if (value && (value.trim().length < minLength)) {
