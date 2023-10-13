@@ -11,17 +11,21 @@
       <div class="row">
         <div class="col-12">
           <s-table v-model="actualPage" :headers="headers" :items="items" :totalPages="pages" v-if="!loader">
-            <template v-slot:user="{ item }">
-              {{ item.user }}
+            <template v-slot:idUser="{ item }">
+              {{ item.userName }}
             </template>
-            <template v-slot:book="{ item }">
-              {{ item.book }}
+            <template v-slot:idBook="{ item }">
+              {{ item.bookName }}
             </template>
-            <template v-slot:loan_start="{ item }">
-              {{ item.loan_start }}
+            <template v-slot:loanStart="{ item }">
+              <div class="text-center">
+                {{ $filters.formatDate(item.loanStart) }}
+              </div>
             </template>
-            <template v-slot:loan_end="{ item }">
-              {{ item.loan_end }}
+            <template v-slot:loanEnd="{ item }">
+              <div class="text-center">
+                {{ $filters.formatDate(item.loanEnd) }}
+              </div>
             </template>
             <template v-slot:status="{ item }">
               <div class="text-center">
@@ -58,7 +62,12 @@ export default {
   data: () => ({
     route: 'loan',
     headers: [
-      { title: 'Nome', field: 'name' },
+      { title: 'Usuário', field: 'idUser' },
+      { title: 'Livro', field: 'idBook' },
+      { title: 'Inicio', field: 'loanStart' },
+      { title: 'Fim', field: 'loanEnd' },
+      { title: 'Status', field: 'status' },
+
     ],
     items: [],
     object: {},
@@ -120,6 +129,7 @@ export default {
         if (this.filterParam) {
           this.filterParam.params.page = page
           this.filterParam.params.limit = this.limit
+          console.log("CAIU LERNOWS");
           raw = await search(this.filterParam.route, this.filterParam.params)
         } else {
           raw = await get(this.route, query)
@@ -158,11 +168,11 @@ export default {
     },
 
     getStatusColor(status) {
-      return status == 1 ? "bg-success" : "bg-danger";
+      return status == 1 ? "bg-primary" : status == 2 ? "bg-success" : "bg-danger";
     },
 
     translateStatusText(status) {
-      return status == 1 ? "Ativo" : "Inativo";
+      return status == 1 ? "Ativo" : status == 2 ? "Finalizado": "Cancelado";
     },
 
     async filterAll(event) {

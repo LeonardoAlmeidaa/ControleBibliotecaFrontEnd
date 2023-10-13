@@ -7,7 +7,7 @@
           <!-- Usuário -->
           <s-input-zoom v-model="object.idUser" ref="idUser" divClass="col-12 col-md-1 col-xxl-1" label="Usuário">
             <template #default>
-              <Usuario :zoom="true" @selectedItem="handleSelectedUser"/>
+              <Usuario :zoom="true" @selectedItem="handleSelectedUser" />
             </template>
           </s-input-zoom>
           <s-input-text v-model="nameUser" ref="nameUser" divClass="col-12 col-md-5 col-xxl-5" label="Nome"
@@ -15,13 +15,20 @@
           <!-- Livro -->
           <s-input-zoom v-model="object.idBook" ref="idBook" divClass="col-12 col-md-1 col-xxl-1" label="Livro">
             <template #default>
-              <Livro :zoom="true" @selectedItem="handleSelectedBook"/>
+              <Livro :zoom="true" @selectedItem="handleSelectedBook" />
             </template>
           </s-input-zoom>
           <s-input-text v-model="nameBook" ref="nameBook" divClass="col-12 col-md-5 col-xxl-5" label="Nome"
             :isDisabled="true" />
-          <!-- <s-input-text v-model="object.name" ref="name" divClass="col-12 col-md-6 col-xxl-6" label="Usuário"
-            placeholder="Usuário" required /> -->
+          <!-- Datas -->
+          <s-input-date v-model="object.loanStart" ref="loanStart" divClass="col-12 col-md-4 col-xxl-4"
+            label="Inicio Empréstimo" />
+          <s-input-date v-model="object.loanEnd" ref="loanEnd" divClass="col-12 col-md-4 col-xxl-4"
+            label="Término Empréstimo" />
+          <s-select v-model="object.status" ref="status" divClass="col-12 col-md-4 col-xxl-4" label="Status"
+            :items="statusData" />
+          <s-input-textarea v-model="object.obs" ref="status" divClass="col-12 col-md-12 col-xxl-12" label="Observação"/>
+          
         </div>
         <div class="row">
           <s-label-required />
@@ -70,10 +77,12 @@ export default {
     title: null,
     route: 'loan',
     nameUser: null,
+    nameBook: null,
 
     statusData: [
       { label: "Ativo", value: 1 },
-      { label: "Inativo", value: 0 },
+      { label: "Finalizado", value: 2 },
+      { label: "Cancelado", value: 0 },
     ],
   }),
   methods: {
