@@ -3,7 +3,7 @@
     <table class="table table-striped table-hover table-bordered table-sm">
       <thead class="text-center table-light">
         <tr v-if="headers && items">
-          <th v-for="header in headers" :key="header" :class="{ 'col-md-1': header.field === 'action' }">
+          <th v-for="header in headers" :key="header">
             {{ header.title }}
           </th>
         </tr>
