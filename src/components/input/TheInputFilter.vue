@@ -12,7 +12,6 @@
           :value="filter.index"
           :label="filter.label"
           v-model="option"
-          :inputId="filter.label"
         />
       </div>
       <div class="col-2 text-end">

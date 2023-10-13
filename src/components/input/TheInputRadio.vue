@@ -8,9 +8,8 @@
       :name="name"
       :value="value"
       @change="update"
-      :id="inputId"
     />
-    <label class="form-check-label" :for="inputId"> {{ label }} </label>
+    <label class="form-check-label" @click="emitClicked"> {{ label }} </label>
   </div>
 </template>
 
@@ -39,6 +38,10 @@ export default defineComponent({
 
   methods: {
     update() { this.$emit('update:modelValue', this.inputValue) },
+    emitClicked() {
+      this.inputValue = this.value
+      this.$emit('clicked')
+    }
   },
 
   emmits: [ "update:modelValue" ],
