@@ -34,7 +34,7 @@
                   @click="removeConfirm(item)"></i>
               </div>
               <div class="text-center" v-if="zoom">
-                <s-button title="Selecionar" color="primary" type="button" @click="emitSelectedItem(item)" />
+                <s-button label="Selecionar" color="primary" type="button" @click="emitSelectedItem(item)" />
               </div>
             </template>
           </s-table>
