@@ -21,7 +21,7 @@
         @update:model-value="updateValue"
         @blur="updateValue"
         :enable-time-picker="false"
-        :day-names="['D', 'S', 'T', 'Q', 'Q', 'S', 'S']"
+        :day-names="['S', 'T', 'Q', 'Q', 'S', 'S', 'D']"
         :min-date="new Date(1900, 1, 1)"
         :max-date="new Date(2023, 12, 31)"
         @keydown.enter.prevent

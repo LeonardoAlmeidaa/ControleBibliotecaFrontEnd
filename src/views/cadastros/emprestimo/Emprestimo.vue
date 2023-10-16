@@ -67,7 +67,7 @@ export default {
       { title: 'Inicio', field: 'loanStart' },
       { title: 'Fim', field: 'loanEnd' },
       { title: 'Status', field: 'status' },
-
+      { title: 'Ações', field: 'actions' },
     ],
     items: [],
     object: {},
@@ -142,8 +142,9 @@ export default {
     },
 
     async edit(id) {
+      console.log(id);
       const route = {
-        name: 'bookUpdate',
+        name: 'loanUpdate',
         params: { id: id },
       }
 

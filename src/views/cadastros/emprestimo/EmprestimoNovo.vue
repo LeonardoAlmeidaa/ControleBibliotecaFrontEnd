@@ -27,8 +27,8 @@
             label="Término Empréstimo" />
           <s-select v-model="object.status" ref="status" divClass="col-12 col-md-4 col-xxl-4" label="Status"
             :items="statusData" />
-          <s-input-textarea v-model="object.obs" ref="status" divClass="col-12 col-md-12 col-xxl-12" label="Observação"/>
-          
+          <s-input-textarea v-model="object.obs" ref="status" divClass="col-12 col-md-12 col-xxl-12" label="Observação" />
+
         </div>
         <div class="row">
           <s-label-required />
@@ -137,18 +137,15 @@ export default {
 
     async save() {
       if (await this.$checkSession()) {
-        this.object.status ? this.object.status = 1 : this.object.status = 0
 
         if (this.object.id) {
-
           const newObj = {
-            name: this.object.name,
-            gender: this.object.gender,
-            author: this.object.author,
-            quantityPages: this.object.quantityPages,
-            status: this.object.status,
-            dateAcquisition: this.object.dateAcquisition,
+            ...this.object
           }
+          delete newObj.id
+          delete newObj.createdAt
+          delete newObj.deletedAt
+          delete newObj.updatedAt
 
           const result = await update(this.route, this.$route.params.id, newObj)
 
@@ -173,10 +170,10 @@ export default {
 
         else {
           const result = await insert(this.route, this.object)
-
+          
           if (result.status) {
             if (result.status != '204') {
-              this.modalBody = result.response.data
+              this.modalBody = result.response.data[0].message
               this.modalError.show()
             }
 
@@ -188,7 +185,7 @@ export default {
           }
 
           else {
-            this.modalBody = result.response.data
+            this.modalBody = result.response.data[0].message
             this.modalError.show()
           }
         }
