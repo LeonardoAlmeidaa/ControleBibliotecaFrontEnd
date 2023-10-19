@@ -19,11 +19,11 @@
             </template>
           </s-input-zoom>
           <s-input-text v-model="nameBook" ref="nameBook" divClass="col-12 col-md-5 col-xxl-5" label="Nome"
-            :isDisabled="true" />
+            isDisabled />
           <!-- Datas -->
           <s-input-date v-model="object.loanStart" ref="loanStart" divClass="col-12 col-md-4 col-xxl-4"
             label="Inicio Empréstimo" />
-          <s-input-date v-model="object.loanEnd" ref="loanEnd" divClass="col-12 col-md-4 col-xxl-4"
+          <s-input-date v-model="object.loanEnd" ref="loanEnd" divClass="col-12 col-md-4 col-xxl-4" isDisabled
             label="Término Empréstimo" />
           <s-select v-model="object.status" ref="status" divClass="col-12 col-md-4 col-xxl-4" label="Status"
             :items="statusData" />
@@ -58,6 +58,7 @@ import Usuario from '@/views/administracao/usuario/Usuario.vue'
 import Livro from '@/views/cadastros/livro/Livro.vue'
 import { validateForm } from '@/rule/functions'
 import { insert, getById, update } from '@/crud'
+import moment from "moment";
 
 export default {
   name: 'LoanNew',
@@ -220,6 +221,22 @@ export default {
 
     if (id) { await this.loadItem(id) }
   },
+
+  watch: {
+    'object.loanStart'(){
+      this.object.loanEnd = moment(this.object.loanStart).add("3", "days").format()
+    },
+    async 'object.idUser'(){
+      const user = await getById('user', this.object.idUser)
+      this.nameUser = user.name
+    },
+    async 'object.idBook'(){
+      const book = await getById('book', this.object.idBook)
+      this.nameBook = book.name
+    }
+    
+  }
+
 }
 
 </script>
