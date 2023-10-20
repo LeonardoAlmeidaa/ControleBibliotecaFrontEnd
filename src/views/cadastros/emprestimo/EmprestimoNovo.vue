@@ -152,7 +152,7 @@ export default {
 
           if (result.status) {
             if (result.status != '204') {
-              this.modalBody = result.response.data
+              this.modalBody = result.response.data[0].message
               this.modalError.show()
             }
 
@@ -164,7 +164,7 @@ export default {
           }
 
           else {
-            this.modalBody = result.response.data
+            this.modalBody = result.response.data[0].message
             this.modalError.show()
           }
         }

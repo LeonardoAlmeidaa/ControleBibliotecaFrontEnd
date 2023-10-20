@@ -123,7 +123,7 @@ export default {
     modalErrorBody: null,
     pages: null,
     actualPage: 1,
-    limit: 10,
+    limit: 2,
 
     filterObject: [
       {
@@ -186,7 +186,7 @@ export default {
         } else {
           raw = await get(this.route, query)
         }
-        this.items = raw
+        this.items = raw.data
         this.pages = Math.ceil(raw.total / this.limit)
       } else {
         this.modalNotLogged.show()

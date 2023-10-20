@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import { get, remove, update, search } from '@/crud.js'
+import { get, remove, update, search, getById } from '@/crud.js'
 
 export default {
   name: 'Loan',
@@ -129,7 +129,6 @@ export default {
         if (this.filterParam) {
           this.filterParam.params.page = page
           this.filterParam.params.limit = this.limit
-          console.log("CAIU LERNOWS");
           raw = await search(this.filterParam.route, this.filterParam.params)
         } else {
           raw = await get(this.route, query)
@@ -147,7 +146,7 @@ export default {
         name: 'loanUpdate',
         params: { id: id },
       }
-
+      
       this.$router.push(route)
     },
 
