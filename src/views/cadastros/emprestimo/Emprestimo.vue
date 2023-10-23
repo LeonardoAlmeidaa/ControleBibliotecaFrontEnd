@@ -168,11 +168,11 @@ export default {
     },
 
     getStatusColor(status) {
-      return status == 1 ? "bg-primary" : status == 2 ? "bg-success" : "bg-danger";
+      return status == "Ativo" ? "bg-primary" : status == "Finalizado" ? "bg-success" : "bg-danger";
     },
 
     translateStatusText(status) {
-      return status == 1 ? "Ativo" : status == 2 ? "Finalizado": "Cancelado";
+      return status == "Ativo" ? "Ativo" : status == "Finalizado" ? "Finalizado": "Cancelado";
     },
 
     async filterAll(event) {

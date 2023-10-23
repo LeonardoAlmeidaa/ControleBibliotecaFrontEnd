@@ -5,30 +5,25 @@
       <form ref="form" @submit.prevent="submitForm">
         <div class="row">
           <!-- Usuário -->
-          <s-input-zoom v-model="object.idUser" ref="idUser" divClass="col-12 col-md-1 col-xxl-1" label="Usuário">
+          <s-input-zoom v-model="object.idUser" ref="idUser" divClass="col-12 col-md-2" label="Usuário">
             <template #default>
               <Usuario :zoom="true" @selectedItem="handleSelectedUser" />
             </template>
           </s-input-zoom>
-          <s-input-text v-model="nameUser" ref="nameUser" divClass="col-12 col-md-5 col-xxl-5" label="Nome"
-            :isDisabled="true" />
+          <s-input-text v-model="nameUser" ref="nameUser" divClass="col-12 col-md-4" label="Nome" :isDisabled="true" />
           <!-- Livro -->
-          <s-input-zoom v-model="object.idBook" ref="idBook" divClass="col-12 col-md-1 col-xxl-1" label="Livro">
+          <s-input-zoom v-model="object.idBook" ref="idBook" divClass="col-12 col-md-2" label="Livro">
             <template #default>
               <Livro :zoom="true" @selectedItem="handleSelectedBook" />
             </template>
           </s-input-zoom>
-          <s-input-text v-model="nameBook" ref="nameBook" divClass="col-12 col-md-5 col-xxl-5" label="Nome"
-            isDisabled />
+          <s-input-text v-model="nameBook" ref="nameBook" divClass="col-12 col-md-4" label="Nome" isDisabled />
           <!-- Datas -->
-          <s-input-date v-model="object.loanStart" ref="loanStart" divClass="col-12 col-md-4 col-xxl-4"
-            label="Inicio Empréstimo" />
-          <s-input-date v-model="object.loanEnd" ref="loanEnd" divClass="col-12 col-md-4 col-xxl-4" isDisabled
+          <s-input-date v-model="object.loanStart" ref="loanStart" divClass="col-12 col-md-2" label="Inicio Empréstimo" />
+          <s-input-date v-model="object.loanEnd" ref="loanEnd" divClass="col-12 col-md-2" isDisabled
             label="Término Empréstimo" />
-          <s-select v-model="object.status" ref="status" divClass="col-12 col-md-4 col-xxl-4" label="Status"
-            :items="statusData" />
-          <s-input-textarea v-model="object.obs" ref="status" divClass="col-12 col-md-12 col-xxl-12" label="Observação" />
-
+          <s-select v-model="object.status" ref="status" divClass="col-12 col-md-2" label="Status" :items="statusData" />
+          <s-input-textarea v-model="object.obs" ref="obs" divClass="col-12 col-md-12" label="Observação" />
         </div>
         <div class="row">
           <s-label-required />
@@ -81,9 +76,9 @@ export default {
     nameBook: null,
 
     statusData: [
-      { label: "Ativo", value: 1 },
-      { label: "Finalizado", value: 2 },
-      { label: "Cancelado", value: 0 },
+      { label: "Ativo", value: "Ativo"},
+      { label: "Finalizado", value: "Finalizado" },
+      { label: "Cancelado", value: "Cancelado" },
     ],
   }),
   methods: {
@@ -171,7 +166,7 @@ export default {
 
         else {
           const result = await insert(this.route, this.object)
-          
+
           if (result.status) {
             if (result.status != '204') {
               this.modalBody = result.response.data[0].message
@@ -223,18 +218,18 @@ export default {
   },
 
   watch: {
-    'object.loanStart'(){
+    'object.loanStart'() {
       this.object.loanEnd = moment(this.object.loanStart).add("3", "days").format()
     },
-    async 'object.idUser'(){
+    async 'object.idUser'() {
       const user = await getById('user', this.object.idUser)
       this.nameUser = user.name
     },
-    async 'object.idBook'(){
+    async 'object.idBook'() {
       const book = await getById('book', this.object.idBook)
       this.nameBook = book.name
     }
-    
+
   }
 
 }

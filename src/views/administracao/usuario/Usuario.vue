@@ -123,7 +123,7 @@ export default {
     modalErrorBody: null,
     pages: null,
     actualPage: 1,
-    limit: 2,
+    limit: 10,
 
     filterObject: [
       {
