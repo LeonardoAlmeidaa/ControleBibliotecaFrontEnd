@@ -83,18 +83,18 @@ export default {
 
     filterObject: [
       {
-        label: 'Usuário',
-        ref: 'bookName',
+        label: 'Inicio',
+        ref: 'bookGender',
         route: 'book',
-        subRoute: 'by-name',
-        param: 'name',
+        subRoute: 'by-gender',
+        param: 'gender',
         type: 'text',
-        signal: '=',
-        operator: '',
+        signal: '',
+        operator: 'LIKE',
         index: 1
       },
       {
-        label: 'Gênero',
+        label: 'Fim',
         ref: 'bookGender',
         route: 'book',
         subRoute: 'by-gender',
@@ -105,15 +105,26 @@ export default {
         index: 2
       },
       {
-        label: 'Autor',
-        ref: 'bookAuthor',
+        label: 'Usuário',
+        ref: 'bookName',
         route: 'book',
-        subRoute: 'by-author',
-        param: 'author',
+        subRoute: 'by-name',
+        param: 'name',
+        type: 'text',
+        signal: '=',
+        operator: '',
+        index: 3
+      },
+      {
+        label: 'Livro',
+        ref: 'bookGender',
+        route: 'book',
+        subRoute: 'by-gender',
+        param: 'gender',
         type: 'text',
         signal: '',
         operator: 'LIKE',
-        index: 3
+        index: 4
       },
     ],
 
@@ -130,10 +141,12 @@ export default {
           this.filterParam.params.page = page
           this.filterParam.params.limit = this.limit
           raw = await search(this.filterParam.route, this.filterParam.params)
+          this.items = raw
         } else {
           raw = await get(this.route, query)
+          console.log(raw.data)
+          this.items = raw.data
         }
-        this.items = raw
         //   this.pages = Math.ceil(raw.total / this.limit)
       } else {
         this.modalNotLogged.show()
@@ -146,7 +159,7 @@ export default {
         name: 'loanUpdate',
         params: { id: id },
       }
-      
+
       this.$router.push(route)
     },
 
@@ -172,7 +185,7 @@ export default {
     },
 
     translateStatusText(status) {
-      return status == "Ativo" ? "Ativo" : status == "Finalizado" ? "Finalizado": "Cancelado";
+      return status == "Ativo" ? "Ativo" : status == "Finalizado" ? "Finalizado" : "Cancelado";
     },
 
     async filterAll(event) {
@@ -200,38 +213,11 @@ export default {
         ]
       } else if (this.filterOption == 2) {
         this.headers = [
-          { title: 'Gênero', field: 'gender' },
-          { title: 'Nome', field: 'name' },
-          { title: 'Autor', field: 'author' },
-          { title: 'Páginas', field: 'quantityPages' },
-          { title: 'Data Aquisição', field: 'dateAcquisition' },
-          { title: 'Ações', field: 'actions' },
-        ]
-      } else if (this.filterOption == 3) {
-        this.headers = [
-          { title: 'Autor', field: 'author' },
-          { title: 'Nome', field: 'name' },
-          { title: 'Gênero', field: 'gender' },
-          { title: 'Páginas', field: 'quantityPages' },
-          { title: 'Data Aquisição', field: 'dateAcquisition' },
-          { title: 'Ações', field: 'actions' },
-        ]
-      } else if (this.filterOption == 4) {
-        this.headers = [
-          { title: 'Páginas', field: 'quantityPages' },
-          { title: 'Nome', field: 'name' },
-          { title: 'Gênero', field: 'gender' },
-          { title: 'Autor', field: 'author' },
-          { title: 'Data Aquisição', field: 'dateAcquisition' },
-          { title: 'Ações', field: 'actions' },
-        ]
-      } else {
-        this.headers = [
-          { title: 'Data Aquisição', field: 'dateAcquisition' },
           { title: 'Nome', field: 'name' },
           { title: 'Gênero', field: 'gender' },
           { title: 'Autor', field: 'author' },
           { title: 'Páginas', field: 'quantityPages' },
+          { title: 'Data Aquisição', field: 'dateAcquisition' },
           { title: 'Ações', field: 'actions' },
         ]
       }
@@ -255,9 +241,9 @@ export default {
       this.loadItems()
       this.changeHeaders()
     },
-    // actualPage() {
-    //     this.loadItems(this.actualPage)
-    // },
+    actualPage() {
+      this.loadItems(this.actualPage)
+    },
   },
 }
 

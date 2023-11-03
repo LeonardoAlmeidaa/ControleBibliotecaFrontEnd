@@ -33,6 +33,7 @@ import TheStatusCircle from '@/components/geral/TheStatusCircle.vue'
 import TheTitle from '@/components/geral/TheTitle.vue'
 // grafico
 import TheDoughnutChart from '@/components/grafico/TheDoughnutChart.vue'
+import ThePieRoseChart from '@/components/grafico/ThePieRoseChart.vue'
 // input
 import TheInputCheck from '@/components/input/TheInputCheck.vue'
 import TheInputDate from '@/components/input/TheInputDate.vue'
@@ -105,6 +106,7 @@ app
   .component('s-title', TheTitle)
   // grafico
   .component('s-chart-doughnut', TheDoughnutChart)
+  .component('s-chart-rose', ThePieRoseChart)
   // input
   .component('s-input-check', TheInputCheck)
   .component('s-input-date', TheInputDate)
