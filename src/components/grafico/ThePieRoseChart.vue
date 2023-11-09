@@ -27,12 +27,16 @@ export default {
   methods: {
     updateChart() {
       const option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
         legend: {
           top: 'bottom'
         },
         series: [
           {
-            name: 'Nightingale Chart',
+            name: 'Gênero',
             type: 'pie',
             radius: [30, 150],
             center: ['50%', '50%'],
@@ -50,7 +54,6 @@ export default {
 
   watch: {
     data() {
-      console.log(this.data)
       this.updateChart();
     }
   },

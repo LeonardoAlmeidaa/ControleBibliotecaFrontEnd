@@ -2,19 +2,13 @@
   <nav class="navbar navbar-expand-lg text-bg-dark d-flex justify-content-between" v-if="logged">
     <div>
       <i class="bi bi-list icon_action ps-3" @click="toggleSidebar"></i>
-      <img src="@/assets/brand_horizontal.png" class="ps-3" style="width: 200px;"/>
+      <img src="@/assets/brand_horizontal.png" class="ps-3" style="width: 200px;" />
     </div>
     <div>
       <i class="bi bi-person-fill-gear icon" @click="$router.push({ name: 'myProfile' })"></i>
       <span class="px-2 me-1">{{ user.name }}</span>
-      <s-button
-        type="button"
-        label="Sair"
-        size="btn-sm me-3"
-        color="danger"
-        icon="bi bi-box-arrow-in-right me-2"
-        @click="logout"
-      />
+      <s-button type="button" label="Sair" size="btn-sm me-3" color="danger" icon="bi bi-box-arrow-in-right me-2"
+        @click="logout" />
     </div>
   </nav>
   <div class="wrapper">
@@ -50,6 +44,13 @@ export default {
 
   data: () => ({
     menuList: [
+      {
+        code: 'home',
+        title: 'Home',
+        status: false,
+        icon: 'bi-house-fill',
+        children: [],
+      },
       {
         code: null,
         title: 'Cadastros',

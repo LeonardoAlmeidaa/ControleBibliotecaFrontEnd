@@ -1,5 +1,7 @@
 <template>
-  <h4>Home View</h4>
+  <h3>Bem Vindo(a)</h3>
+  <hr>
+  <h5>Dashboard - Livros por Gênero</h5>
   <s-chart-rose :data="data" />
 </template>
 
@@ -10,7 +12,7 @@ export default {
   data: () => ({
     data: [
       { value: 40, name: 'Livro 1' },
-      { value: 38, name: 'Livro 2 ' },
+      { value: 38, name: 'Livro 2 '},
       { value: 32, name: 'Livro 3' },
     ]
   }),

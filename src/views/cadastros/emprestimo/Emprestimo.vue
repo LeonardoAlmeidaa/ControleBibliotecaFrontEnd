@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import { get, remove, update, search, getById } from '@/crud.js'
+import { get, remove, search } from '@/crud.js'
 
 export default {
   name: 'Loan',
@@ -62,10 +62,10 @@ export default {
   data: () => ({
     route: 'loan',
     headers: [
-      { title: 'Usuário', field: 'idUser' },
-      { title: 'Livro', field: 'idBook' },
       { title: 'Inicio', field: 'loanStart' },
       { title: 'Fim', field: 'loanEnd' },
+      { title: 'Usuário', field: 'idUser' },
+      { title: 'Livro', field: 'idBook' },
       { title: 'Status', field: 'status' },
       { title: 'Ações', field: 'actions' },
     ],
@@ -84,24 +84,24 @@ export default {
     filterObject: [
       {
         label: 'Inicio',
-        ref: 'bookGender',
-        route: 'book',
-        subRoute: 'by-gender',
-        param: 'gender',
-        type: 'text',
-        signal: '',
-        operator: 'LIKE',
+        ref: 'startDate',
+        route: 'loan',
+        subRoute: 'by-start-date',
+        param: 'loanStart',
+        type: 'date',
+        signal: '=',
+        operator: '',
         index: 1
       },
       {
         label: 'Fim',
-        ref: 'bookGender',
-        route: 'book',
-        subRoute: 'by-gender',
-        param: 'gender',
-        type: 'text',
-        signal: '',
-        operator: 'LIKE',
+        ref: 'EndDate',
+        route: 'loan',
+        subRoute: 'by-end-date',
+        param: 'loanEnd',
+        type: 'date',
+        signal: '=',
+        operator: '',
         index: 2
       },
       {
@@ -144,10 +144,9 @@ export default {
           this.items = raw
         } else {
           raw = await get(this.route, query)
-          console.log(raw.data)
           this.items = raw.data
         }
-        //   this.pages = Math.ceil(raw.total / this.limit)
+        this.pages = Math.ceil(raw.total / this.limit)
       } else {
         this.modalNotLogged.show()
       }
@@ -204,20 +203,39 @@ export default {
     changeHeaders() {
       if (this.filterOption == 1) {
         this.headers = [
-          { title: 'Nome', field: 'name' },
-          { title: 'Gênero', field: 'gender' },
-          { title: 'Autor', field: 'author' },
-          { title: 'Páginas', field: 'quantityPages' },
-          { title: 'Data Aquisição', field: 'dateAcquisition' },
+          { title: 'Inicio', field: 'loanStart' },
+          { title: 'Fim', field: 'loanEnd' },
+          { title: 'Usuário', field: 'idUser' },
+          { title: 'Livro', field: 'idBook' },
+          { title: 'Status', field: 'status' },
           { title: 'Ações', field: 'actions' },
         ]
       } else if (this.filterOption == 2) {
         this.headers = [
-          { title: 'Nome', field: 'name' },
-          { title: 'Gênero', field: 'gender' },
-          { title: 'Autor', field: 'author' },
-          { title: 'Páginas', field: 'quantityPages' },
-          { title: 'Data Aquisição', field: 'dateAcquisition' },
+          { title: 'Fim', field: 'loanEnd' },
+          { title: 'Inicio', field: 'loanStart' },
+          { title: 'Usuário', field: 'idUser' },
+          { title: 'Livro', field: 'idBook' },
+          { title: 'Status', field: 'status' },
+          { title: 'Ações', field: 'actions' },
+        ]
+      } else if (this.filterOption == 3) {
+        this.headers = [
+          { title: 'Usuário', field: 'idUser' },
+          { title: 'Inicio', field: 'loanStart' },
+          { title: 'Fim', field: 'loanEnd' },
+          { title: 'Livro', field: 'idBook' },
+          { title: 'Status', field: 'status' },
+          { title: 'Ações', field: 'actions' },
+        ]
+      }
+      else {
+        this.headers = [
+          { title: 'Livro', field: 'idBook' },
+          { title: 'Inicio', field: 'loanStart' },
+          { title: 'Fim', field: 'loanEnd' },
+          { title: 'Usuário', field: 'idUser' },
+          { title: 'Status', field: 'status' },
           { title: 'Ações', field: 'actions' },
         ]
       }

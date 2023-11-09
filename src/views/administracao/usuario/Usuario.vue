@@ -183,10 +183,11 @@ export default {
           this.filterParam.params.page = page
           this.filterParam.params.limit = this.limit
           raw = await search(this.filterParam.route, this.filterParam.params)
+          this.items = raw
         } else {
           raw = await get(this.route, query)
+          this.items = raw.data
         }
-        this.items = raw.data
         this.pages = Math.ceil(raw.total / this.limit)
       } else {
         this.modalNotLogged.show()
